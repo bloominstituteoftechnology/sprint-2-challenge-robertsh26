@@ -6,31 +6,133 @@
   <script id="challenge">
     // 👉 CHALLENGE 1
     function profileActivation(profile, reason) {
+      if (profile.active) {
+        if (reason) {
+          // Deactivate profile and assign the reason
+          profile.active = false;
+          profile.reason = reason;
+        } else {
+          // Missing reason on an active profile
+          return "confirm status manually";
+        }
+      } else {
+        // Activate profile and remove the reason
+        profile.active = true;
+        delete profile.reason;
+      }
 
+      return profile;
     }
 
     // 👉 CHALLENGE 2
     function mineSweeper(grid, x, y) {
+      if (x < 1 || x > 3 || y < 1 || y > 3) {
+        return "invalid coordinates";
+      }
+
+      // Get the value at the specified coordinates
+      let squareValue = grid[y - 1][x - 1];
+
+      // Check the value and return the appropriate result
+      if (squareValue === "🟥") {
+        return "🟥 💀"; // Landed on a mine
+      } else if (squareValue === "🟦") {
+        return "🟦 🥳"; // Landed on a safe spot
+      }
 
     }
 
     // 👉 CHALLENGE 3
     function booleanize(obj) {
+      for (let key in obj) {
+        // Check if the property name exceeds 9 characters
+        if (key.length > 9) {
+          return "shorten all prop names to 9 chars or less";
+        }
+
+        // Transform values based on the specified criteria
+        if (obj[key] === 0) {
+          obj[key] = false;
+        } else if (obj[key] === 1) {
+          obj[key] = true;
+        } else if (obj[key] === null) {
+          // Delete key-value pair if the value is null
+          delete obj[key];
+        }
+      }
+
+      return obj;
 
     }
 
     // 👉 CHALLENGE 4
     function scrub(text, forbidden) {
+      if (!text || forbidden.length === 0) {
+        return text;
+      }
+
+      // Split the text into words and process each word
+      let words = text.split(' ');
+      for (let i = 0; i < words.length; i++) {
+        // Remove punctuation from the word
+        let word = words[i].replace(/[^\w]/g, '');
+
+        // Check if the word is in the forbidden list
+        if (forbidden.indexOf(word.toLowerCase()) !== -1) {
+          // Replace the word with a string of "x" characters of equal length
+          let replacement = 'x'.repeat(word.length);
+          // Preserve punctuation if any and update the word in the array
+          words[i] = words[i].replace(word, replacement);
+        }
+      }
+
+      // Join the words back into a string and return the result
+      return words.join(' ');
 
     }
 
     // 👉 CHALLENGE 5 (bonus, NOT graded)
     function normalizePhoneNumber(num) {
+      if (num.length !== 10 || !/^\d+$/.test(num)) {
+        return "Invalid phone number";
+      }
+
+      // Create a template "(XXX) XXX-XXXX"
+      let template = "(XXX) XXX-XXXX";
+
+      // Loop backwards and replace 'X' with digits from the input number
+      for (let i = 0; i < num.length; i++) {
+        template = template.replace('X', num[i]);
+      }
+
+      return template;
+      
 
     }
+  
 
     // 👉 CHALLENGE 6 (bonus, NOT graded)
     function diceRolls() {
+      let throws = 0; // Total number of rolls
+      let counter = 0; // Consecutive number of sixes
+
+      while (true) {
+        let roll = Math.floor(Math.random() * 6) + 1; // Simulate rolling a six-sided die
+        throws++; // Increment the total number of rolls
+
+        if (roll === 6) {
+          counter++; // Increment consecutive sixes counter
+        } else {
+          counter = 0; // Reset counter if the roll is not a six
+        }
+
+        if (counter === 3) {
+          // Break out of the loop if three consecutive sixes are rolled
+          break;
+        }
+    }
+
+      return throws;
 
     }
 
